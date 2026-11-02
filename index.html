@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark" data-motion="balanced">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0b0d" />
+    <meta name="description" content="RETS — navegador de Nexaris." />
+    <title>RETS</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="stylesheet" href="./assets/styles-CVk8813F.css" />
+    <link rel="modulepreload" href="./assets/index-Bz-01U5_.js" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" />
+    <script>
+      try {
+        var s = JSON.parse(localStorage.getItem("rets-settings") || "{}");
+        var t = (s.state && s.state.theme) || "dark";
+        var a = s.state && s.state.animationsEnabled;
+        var m = (s.state && s.state.motionIntensity) || "balanced";
+        document.documentElement.dataset.theme = t;
+        document.documentElement.dataset.motion = a === false ? "off" : m;
+      } catch (e) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js").catch((error) => {
+            console.error("RETS: no se pudo registrar el Service Worker", error);
+          });
+        });
+      }
+    </script>
+  </head>
+  <body class="antialiased">
+    <script type="module" src="./assets/index-Bz-01U5_.js"></script>
+  </body>
+</html>
