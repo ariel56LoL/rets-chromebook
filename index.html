@@ -1,11 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es" data-theme="dark" data-motion="balanced">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0a0b0d" />
     <meta name="description" content="RETS — navegador de Nexaris." />
     <title>RETS</title>
+    <script>
+      // GitHub Pages project sites require a trailing slash for relative asset URLs.
+      if (location.pathname === "/rets-chromebook") {
+        history.replaceState(history.state, "", "/rets-chromebook/" + location.search + location.hash);
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./icons/icon-192.png" />
     <link rel="stylesheet" href="./assets/styles-CVk8813F.css" />
@@ -16,13 +22,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" />
     <script>
       try {
-        var s = JSON.parse(localStorage.getItem("rets-settings") || "{}");
-        var t = (s.state && s.state.theme) || "dark";
-        var a = s.state && s.state.animationsEnabled;
-        var m = (s.state && s.state.motionIntensity) || "balanced";
-        document.documentElement.dataset.theme = t;
-        document.documentElement.dataset.motion = a === false ? "off" : m;
-      } catch (e) {
+        var saved = JSON.parse(localStorage.getItem("rets-settings") || "{}");
+        var state = saved.state || {};
+        document.documentElement.dataset.theme = state.theme || "dark";
+        document.documentElement.dataset.motion = state.animationsEnabled === false ? "off" : (state.motionIntensity || "balanced");
+      } catch (_) {
         document.documentElement.dataset.theme = "dark";
       }
     </script>
@@ -30,7 +34,7 @@
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker.register("./sw.js").catch((error) => {
+          navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch((error) => {
             console.error("RETS: no se pudo registrar el Service Worker", error);
           });
         });

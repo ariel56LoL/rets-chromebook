@@ -1,29 +1,31 @@
-# RETS Chromebook — GitHub Pages
+# RETS Chromebook — paquete corregido para GitHub Pages
 
-Esta carpeta contiene una preparación de RETS PWA para publicarse como sitio de proyecto de GitHub Pages.
+## Publicación
+1. En GitHub, abre el repositorio `rets-chromebook`.
+2. Sustituye los archivos de la raíz por el contenido de este ZIP, manteniendo las carpetas `assets`, `icons` y `__grok`.
+3. Comprueba que `index.html` quede directamente en la raíz del repositorio, no dentro de otra carpeta.
+4. Confirma los cambios en la rama `main`.
+5. En Settings → Pages, mantén `Deploy from a branch`, `main` y `/ (root)`.
+6. Espera a que el despliegue de GitHub Pages aparezca en verde y abre:
+   https://ariel56lol.github.io/rets-chromebook/
 
-## Publicar
+## Qué corrige este paquete
+- Rutas relativas para los archivos, manifiesto e iconos de GitHub Pages.
+- Normalización de la URL del proyecto con barra final.
+- `basepath` del router configurado para `/rets-chromebook`.
+- Service Worker con caché versionada y rutas dentro del proyecto; no transforma rutas `/api/` en páginas de la aplicación.
+- Barra RETS expandida por defecto, también al migrar la configuración local anterior.
+- La navegación externa ya no solicita `/api/proxy` (endpoint que GitHub Pages no puede ejecutar). En su lugar, muestra una acción explícita para abrir la dirección en una pestaña normal de Chrome, sin presentar el 404 de GitHub como si fuera el sitio visitado.
 
-1. Crea un repositorio nuevo en GitHub, por ejemplo `rets-chromebook`.
-2. Sube **el contenido de esta carpeta** a la raíz del repositorio (index.html debe quedar en la raíz).
-3. En GitHub abre Settings → Pages.
-4. En Build and deployment selecciona Deploy from a branch.
-5. Selecciona la rama `main` y la carpeta `/ (root)`, y guarda.
-6. Espera a que GitHub Pages publique el sitio mediante HTTPS.
-7. Abre la URL publicada en ChromeOS.
+## Límites importantes de esta versión PWA
+GitHub Pages solo aloja archivos estáticos. No ejecuta un servidor, un proxy web ni un motor Chromium embebido. Por eso, los sitios externos se abren en Chrome fuera de la interfaz RETS. Para que las páginas se rendericen dentro de las pestañas de RETS, se necesita una versión con motor nativo (por ejemplo, una aplicación empaquetada para ChromeOS/Android compatible) o un backend de navegación mantenido y configurado aparte. Una PWA alojada en GitHub Pages no puede convertirse por sí sola en un navegador Chromium completo.
 
-## Instalar en ChromeOS
+## Datos que conserva la PWA
+La app ya usa almacenamiento local del navegador para ajustes, historial, pestañas/sesión, perfiles locales, notas y descargas; RETS Vault usa IndexedDB y cifrado Web Crypto. Estos datos permanecen en el dispositivo/perfil de Chrome y no se sincronizan automáticamente entre dispositivos. No borres los datos del sitio si deseas conservarlos.
 
-Abre la URL HTTPS en Chrome. Si el administrador permite instalar aplicaciones web, utiliza el icono de instalación de la barra de direcciones o el menú de Chrome.
+Los perfiles de RETS guardan información de perfil en el dispositivo, pero esta PWA no conserva una sesión de Google independiente por perfil. Las cookies y contraseñas de los sitios que abras fuera de RETS quedan bajo el control del navegador Chrome. Las páginas que recorras después de salir a Chrome no se copian automáticamente al historial interno de RETS.
 
-## Notas técnicas
+El gestor de contraseñas de prueba se desactivó porque la versión anterior guardaba contraseñas sin cifrado. Usa el gestor de contraseñas de Chrome. Si anteriormente guardaste contraseñas reales en el antiguo panel de RETS, considera cambiarlas y borrar la entrada `rets-passwords` de los datos locales del sitio.
 
-- Las rutas de HTML, manifiesto, iconos, CSS y JavaScript se han hecho relativas para soportar una URL de proyecto como `https://usuario.github.io/rets-chromebook/`.
-- El Service Worker usa el directorio de despliegue como ámbito y precarga el núcleo de la aplicación.
-- Los recursos remotos, como Google Fonts, necesitan conexión a Internet.
-- La caché permite recuperar el shell de la aplicación después de una primera carga correcta. No garantiza que todas las funciones o servicios remotos trabajen sin conexión.
-- La instalación puede estar deshabilitada por las políticas de administración de una Chromebook escolar. Esta preparación no intenta eludir esas políticas.
-
-## Importante
-
-Esta es una preparación de publicación, no una publicación ya realizada. Antes de considerarla estable, prueba la URL real en ChromeOS y revisa DevTools → Application → Manifest / Service Workers y Console.
+## Actualización tras instalar una versión anterior
+Si ves una versión antigua, cierra todas las pestañas de RETS, vuelve a abrir el sitio y usa una recarga completa. En Chrome de escritorio puedes usar `Ctrl + Shift + R`. En móvil, borra solo la caché del sitio si sigue sirviendo archivos antiguos; no borres el almacenamiento del sitio si quieres conservar tus datos.
